@@ -9,10 +9,10 @@ CELL_SIZE = 20
 FPS = 10
 
 # Colors
-BLACK = (83, 83, 83)
+BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
-YELLOW = (13, 16, 12)
-BLUE = (222, 216, 177)
+YELLOW = (255, 255, 0)
+BLUE = (33, 33, 255)
 
 # Directions
 UP = (0, -1)
@@ -38,7 +38,7 @@ class Pacman:
 
     def draw(self, screen):
         # Draw Pac-Man
-        center = (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2)
+        center = (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2 + 60)
         radius = CELL_SIZE // 2 - 2
         mouth_angle = 30 if self.mouth_open else 0
 
@@ -69,6 +69,12 @@ pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
 pygame.display.set_caption("Pac-Man")
 clock = pygame.time.Clock()
+
+# Font for Title and Score
+font = pygame.font.SysFont("arial", 24)
+
+# Initial Score
+score = 0
 
 # Define the Maze (Classic Layout)
 maze = [
@@ -135,10 +141,18 @@ while True:
     for y in range(len(maze)):
         for x in range(len(maze[y])):
             if maze[y][x] == 1:
-                pygame.draw.rect(screen, BLUE, (x * CELL_SIZE, y * CELL_SIZE, CELL_SIZE, CELL_SIZE))
+                pygame.draw.rect(screen, BLUE, (x * CELL_SIZE, y * CELL_SIZE + 60, CELL_SIZE, CELL_SIZE))
 
     # Draw Pacman
     pacman.draw(screen)
+
+    # Draw Title
+    title_surface = font.render("Pac-Man", True, WHITE)
+    screen.blit(title_surface, (SCREEN_WIDTH // 2 - title_surface.get_width() // 2, 10))
+
+    # Draw Score
+    score_surface = font.render(f"Score: {score}", True, WHITE)
+    screen.blit(score_surface, (10, 10))
 
     # Update the Display
     pygame.display.flip()
