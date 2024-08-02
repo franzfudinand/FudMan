@@ -9,10 +9,11 @@ CELL_SIZE = 20
 FPS = 10
 
 # Colors
-BLACK = (0, 0, 0)
+BLACK = (44, 44, 44)
 WHITE = (255, 255, 255)
-YELLOW = (255, 255, 0)
-BLUE = (33, 33, 255)
+BLUE = (13, 16, 12)
+YELLOW = (222, 216, 177)
+RED = (255, 204, 204)
 
 # Directions
 UP = (0, -1)
@@ -35,9 +36,10 @@ class Pacman:
         if maze[new_y][new_x] != 1:
             self.x = new_x
             self.y = new_y
+            return True
+        return False
 
     def draw(self, screen):
-        # Draw Pac-Man
         center = (self.x * CELL_SIZE + CELL_SIZE // 2, self.y * CELL_SIZE + CELL_SIZE // 2 + 60)
         radius = CELL_SIZE // 2 - 2
         mouth_angle = 30 if self.mouth_open else 0
@@ -63,7 +65,6 @@ class Pacman:
 
         self.mouth_open = not self.mouth_open
 
-
 # Game Initialization
 pygame.init()
 screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
@@ -78,7 +79,6 @@ score = 0
 
 # Define the Maze (Classic Layout)
 maze = [
-    #  0  1  2  3  4  5  6  7  8  9  10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27
     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],  # 0
     [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],  # 1
     [1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 1, 1, 1, 1, 1, 0, 0, 1],  # 2
@@ -109,6 +109,13 @@ maze = [
 # Create Pacman
 pacman = Pacman(1, 1)
 
+# Define Collectible Dots
+dots = [(x, y) for y in range(1, len(maze) - 1) for x in range(1, len(maze[y]) - 1) if maze[y][x] == 0]
+
+def draw_dots(screen, dots):
+    for dot in dots:
+        pygame.draw.circle(screen, RED, (dot[0] * CELL_SIZE + CELL_SIZE // 2, dot[1] * CELL_SIZE + CELL_SIZE // 2 + 60), 5)
+
 # Game Loop
 while True:
     for event in pygame.event.get():
@@ -132,7 +139,11 @@ while True:
                     pacman.direction = RIGHT
 
     # Update Pacman
-    pacman.move(maze)
+    if pacman.move(maze):
+        # Check for dot collection
+        if (pacman.x, pacman.y) in dots:
+            dots.remove((pacman.x, pacman.y))
+            score += 69
 
     # Draw Everything
     screen.fill(BLACK)
@@ -145,6 +156,9 @@ while True:
 
     # Draw Pacman
     pacman.draw(screen)
+
+    # Draw Dots
+    draw_dots(screen, dots)
 
     # Draw Title
     title_surface = font.render("Pac-Man", True, WHITE)
