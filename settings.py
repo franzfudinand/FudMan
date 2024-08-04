@@ -5,10 +5,15 @@ CELL_SIZE = 20
 FPS = 10
 
 # Colors
-BLACK = (83, 83, 83)
+BLACK = (44, 44, 44)
 WHITE = (255, 255, 255)
-YELLOW = (13, 16, 12)
-BLUE = (222, 216, 177)
+BLUE = (13, 16, 12)
+YELLOW = (222, 216, 177)
+RED = (130, 215, 192)
+YELLOW_FUD = (242,242,34)
+PINK = (255, 105, 180)
+CYAN = (0, 255, 255)
+ORANGE = (255, 165, 0)
 
 # Directions
 UP = (0, -1)
