@@ -1,3 +1,7 @@
+# Dumb game by Franz
+# License issued by your mom
+
+
 import pygame
 import sys
 import random
